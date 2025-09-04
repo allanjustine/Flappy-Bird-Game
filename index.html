@@ -263,6 +263,7 @@
       let gameStarted = false;
       let highestScoreItem = localStorage.getItem("highestScoreItem") || 0;
       let pipeGap = 250;
+      let pipeSpeed = 3; // ✅ default speed
       let countdownStarted = false;
 
       if (Number(highestScoreItem) !== 0) {
@@ -296,7 +297,7 @@
         function movePipe() {
           if (gameOver) return;
 
-          pipeX -= 3;
+          pipeX -= pipeSpeed; // ✅ use variable speed
           topPipe.style.left = pipeX + "px";
           bottomPipe.style.left = pipeX + "px";
 
@@ -347,10 +348,13 @@
           endGame();
         }
 
-        if (score > 100) {
-          pipeGap = 150;
-        } else if (score > 200) {
-          pipeGap = 100;
+        // ✅ Difficulty scaling
+        if (score > 15) {
+          pipeGap = 180;
+          pipeSpeed = 7;
+        } else if (score > 10) {
+          pipeGap = 200;
+          pipeSpeed = 5;
         }
 
         bird.style.top = birdTop + "px";
@@ -361,8 +365,11 @@
         if (!gameOver) {
           gameOver = true;
 
+          let isNewHigh = false;
           if (score > Number(highestScoreItem)) {
             localStorage.setItem("highestScoreItem", score);
+            highestScoreItem = score; // ✅ update
+            isNewHigh = true;
           }
 
           setTimeout(() => {
@@ -377,11 +384,9 @@
             <h2 style="color: red;">Game Over!</h2><br>
             <span>Score: ${score}</span><br>
             <span>${
-              highestScoreItem
-                ? "Highest Score: " + highestScoreItem
-                : score > Number(highestScoreItem)
-                ? "New High Score: " + score
-                : ""
+              isNewHigh
+                ? "🎉 New High Score: " + score
+                : "Highest Score: " + highestScoreItem
             }</span><br>
               <span style="animation: blink 1.5s infinite;">Press any key or click to continue.</span>
           </div>
@@ -428,6 +433,7 @@
           });
         }
       }
+
       function startGame() {
         if (!gameStarted) {
           gameStarted = true;
