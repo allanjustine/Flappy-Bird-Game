@@ -25,11 +25,49 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%) scaleX(-1);
         width: clamp(40px, 6vw, 80px);
         height: clamp(40px, 6vw, 80px);
         z-index: 9999;
-        transform: scaleX(-1);
+      }
+
+      /* Clouds */
+      .cloud {
+        position: absolute;
+        top: 10%;
+        width: 120px;
+        height: 70px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: moveClouds 60s linear infinite;
+        z-index: 0;
+      }
+      .cloud::before,
+      .cloud::after {
+        content: "";
+        position: absolute;
+        background: white;
+        width: 100px;
+        height: 80px;
+        top: -20px;
+        left: -30px;
+        border-radius: 50%;
+      }
+      .cloud::after {
+        width: 80px;
+        height: 80px;
+        top: -30px;
+        left: 50px;
+      }
+
+      @keyframes moveClouds {
+        0% {
+          left: 110%;
+        }
+        100% {
+          left: -200px;
+        }
       }
 
       /* Mario-style Pipes */
@@ -47,7 +85,6 @@
         bottom: 0;
       }
 
-      /* Add a pipe head like Mario's tunnel */
       .pipe::before {
         content: "";
         display: block;
@@ -78,10 +115,9 @@
         background-image: repeating-linear-gradient(
           -45deg,
           #6abf4b,
-          #6abf4b 10px,
-          #8b4513 10px,
-          #8b4513 20px
+          #fa13e7 20px
         );
+        z-index: 10;
       }
 
       /* Score */
@@ -200,10 +236,15 @@
       <div class="highest-score-container">
         <div id="highestScore"></div>
       </div>
+
+      <!-- Clouds -->
+      <div class="cloud" style="top: 10%; animation-duration: 60s"></div>
+      <div class="cloud" style="top: 25%; animation-duration: 80s"></div>
+      <div class="cloud" style="top: 40%; animation-duration: 100s"></div>
+
       <div class="ground"></div>
     </div>
 
-    <!-- The JavaScript stays the same -->
     <script>
       const game = document.getElementById("game");
       const bird = document.getElementById("bird");
@@ -266,7 +307,6 @@
             .querySelector(".ground")
             .getBoundingClientRect();
 
-          // collision check
           if (
             (birdRect.right > topRect.left &&
               birdRect.left < topRect.right &&
@@ -397,10 +437,9 @@
           setInterval(createPipe, 2500);
           gameLoop();
         }
-        velocity = jump; // make bird jump when starting
+        velocity = jump;
       }
 
-      // Controls
       document.addEventListener("keydown", (e) => {
         if (e.code === "Space") {
           if (!gameStarted) {
