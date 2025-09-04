@@ -349,12 +349,18 @@
         }
 
         // ✅ Difficulty scaling
-        if (score > 15) {
+        if (score > 150) {
           pipeGap = 180;
-          pipeSpeed = 7;
-        } else if (score > 10) {
+          pipeSpeed = 10;
+        } else if (score > 100) {
           pipeGap = 200;
+          pipeSpeed = 7;
+        } else if (score > 50) {
+          pipeGap = 210;
           pipeSpeed = 5;
+        } else if (score > 20) {
+          pipeGap = 220;
+          pipeSpeed = 4;
         }
 
         bird.style.top = birdTop + "px";
