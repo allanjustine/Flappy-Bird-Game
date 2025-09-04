@@ -29,13 +29,16 @@
         width: clamp(40px, 6vw, 80px);
         height: clamp(40px, 6vw, 80px);
         z-index: 9999;
+        transform: scaleX(-1);
       }
 
-      /* Pipes */
+      /* Mario-style Pipes */
       .pipe {
         position: absolute;
-        width: clamp(40px, 6vw, 80px);
-        background: green;
+        width: clamp(60px, 7vw, 90px);
+        background: linear-gradient(to bottom, #3cb043, #2e7d32);
+        border: 4px solid #145a1e;
+        border-radius: 5px;
       }
       .pipe.top {
         top: 0;
@@ -44,14 +47,41 @@
         bottom: 0;
       }
 
-      /* Ground */
+      /* Add a pipe head like Mario's tunnel */
+      .pipe::before {
+        content: "";
+        display: block;
+        height: 20px;
+        width: 120%;
+        background: #2e7d32;
+        border: 4px solid #145a1e;
+        border-radius: 4px;
+        position: absolute;
+        left: -10%;
+      }
+      .pipe.top::before {
+        bottom: -4px;
+      }
+      .pipe.bottom::before {
+        top: -4px;
+      }
+
+      /* Ground with grass */
       .ground {
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
-        height: clamp(30px, 6vh, 60px);
+        height: clamp(40px, 7vh, 70px);
         background: #8b4513;
+        border-top: 8px solid #2e7d32;
+        background-image: repeating-linear-gradient(
+          -45deg,
+          #6abf4b,
+          #6abf4b 10px,
+          #8b4513 10px,
+          #8b4513 20px
+        );
       }
 
       /* Score */
@@ -142,7 +172,6 @@
         }
       }
 
-      /* Extra tweaks for small devices */
       @media (max-width: 768px) {
         .score {
           top: 1vh;
@@ -162,7 +191,7 @@
       <img
         class="bird"
         id="bird"
-        src="https://media.tenor.com/mRHmpBbk4E0AAAAj/pigeon-dove.gif"
+        src="https://media.tenor.com/SXm-U89pibcAAAAi/bird-flying.gif"
         alt="bird"
       />
       <div class="start-text" id="startText">Press Space to Start</div>
@@ -174,6 +203,7 @@
       <div class="ground"></div>
     </div>
 
+    <!-- The JavaScript stays the same -->
     <script>
       const game = document.getElementById("game");
       const bird = document.getElementById("bird");
