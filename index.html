@@ -26,15 +26,15 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: clamp(40px, 8vw, 70px);
-        height: clamp(40px, 8vw, 70px);
+        width: clamp(40px, 6vw, 80px);
+        height: clamp(40px, 6vw, 80px);
         z-index: 9999;
       }
 
       /* Pipes */
       .pipe {
         position: absolute;
-        width: clamp(40px, 8vw, 80px);
+        width: clamp(40px, 6vw, 80px);
         background: green;
       }
       .pipe.top {
@@ -60,7 +60,7 @@
         top: 2vh;
         left: 50%;
         transform: translateX(-50%);
-        font-size: clamp(2rem, 8vw, 5rem);
+        font-size: clamp(2rem, 6vw, 5rem);
         font-weight: bold;
         color: #fff;
         text-shadow: 2px 2px 2px #000;
@@ -73,11 +73,13 @@
         top: 65%;
         left: 50%;
         transform: translateX(-50%);
-        font-size: clamp(1rem, 5vw, 2rem);
+        font-size: clamp(1rem, 4vw, 2rem);
         font-weight: bold;
         color: white;
         text-shadow: 2px 2px 5px #000;
         animation: blink 1.5s infinite;
+        text-align: center;
+        padding: 0 10px;
       }
 
       .gameover-text {
@@ -85,7 +87,7 @@
         top: 30%;
         left: 50%;
         transform: translateX(-50%);
-        font-size: clamp(1rem, 5vw, 2rem);
+        font-size: clamp(1.2rem, 5vw, 2rem);
         font-weight: bold;
         color: white;
         text-shadow: 2px 2px 5px #000;
@@ -97,9 +99,8 @@
       .timestart-text {
         position: absolute;
         left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        font-size: clamp(5rem, 20vw, 15rem);
+        transform: translateX(-50%);
+        font-size: clamp(4rem, 20vw, 15rem);
         font-weight: bold;
         color: white;
         text-shadow: 2px 2px 5px #000;
@@ -118,10 +119,11 @@
         top: 80%;
         left: 50%;
         transform: translateX(-50%);
-        font-size: clamp(1rem, 5vw, 2rem);
+        font-size: clamp(1rem, 3vw, 2rem);
         font-weight: bold;
         color: rgb(171, 17, 17);
         text-shadow: 2px 2px 5px #863030;
+        text-align: center;
       }
 
       #highestScore {
@@ -129,8 +131,28 @@
       }
 
       @keyframes blink {
-        0%, 50%, 100% { opacity: 1; }
-        25%, 75% { opacity: 0; }
+        0%,
+        50%,
+        100% {
+          opacity: 1;
+        }
+        25%,
+        75% {
+          opacity: 0;
+        }
+      }
+
+      /* Extra tweaks for small devices */
+      @media (max-width: 768px) {
+        .score {
+          top: 1vh;
+        }
+        .start-text {
+          top: 60%;
+        }
+        .highest-score-container {
+          top: 85%;
+        }
       }
     </style>
   </head>
@@ -143,7 +165,7 @@
         src="https://media.tenor.com/mRHmpBbk4E0AAAAj/pigeon-dove.gif"
         alt="bird"
       />
-      <div class="start-text" id="startText">Press Space or Tap to Start</div>
+      <div class="start-text" id="startText">Press Space to Start</div>
       <div class="gameover-text" id="gameoverText"></div>
       <div class="timestart-text" id="timestartText">3</div>
       <div class="highest-score-container">
@@ -169,7 +191,7 @@
       let gameOver = false;
       let gameStarted = false;
       let highestScoreItem = localStorage.getItem("highestScoreItem") || 0;
-      let pipeGap = game.clientHeight * 0.25; // 25% of screen height
+      let pipeGap = 250;
       let countdownStarted = false;
 
       if (Number(highestScoreItem) !== 0) {
@@ -190,20 +212,20 @@
         const bottomPipe = document.createElement("div");
         bottomPipe.classList.add("pipe", "bottom");
         bottomPipe.style.height =
-          game.clientHeight - pipeHeight - pipeGap - (game.clientHeight * 0.05) + "px";
+          game.clientHeight - pipeHeight - pipeGap - 50 + "px";
         bottomPipe.style.left = "100%";
 
         game.appendChild(topPipe);
         game.appendChild(bottomPipe);
 
         let pipeX = game.clientWidth;
-        const pipeWidth = topPipe.offsetWidth;
+        const pipeWidth = 80;
         let scored = false;
 
         function movePipe() {
           if (gameOver) return;
 
-          pipeX -= game.clientWidth * 0.005; // speed scales with screen size
+          pipeX -= 3;
           topPipe.style.left = pipeX + "px";
           bottomPipe.style.left = pipeX + "px";
 
@@ -214,6 +236,7 @@
             .querySelector(".ground")
             .getBoundingClientRect();
 
+          // collision check
           if (
             (birdRect.right > topRect.left &&
               birdRect.left < topRect.right &&
@@ -250,14 +273,14 @@
         birdTop += velocity;
 
         if (birdTop < 0) birdTop = 0;
-        if (birdTop + bird.clientHeight > game.clientHeight - document.querySelector(".ground").offsetHeight) {
+        if (birdTop + bird.clientHeight > game.clientHeight - 50) {
           endGame();
         }
 
         if (score > 100) {
-          pipeGap = game.clientHeight * 0.18;
+          pipeGap = 150;
         } else if (score > 200) {
-          pipeGap = game.clientHeight * 0.12;
+          pipeGap = 100;
         }
 
         bird.style.top = birdTop + "px";
@@ -280,7 +303,8 @@
 
           gameoverText.style.display = "block";
           gameoverText.innerHTML = `
-            <h2 style="color: red;">Game Over!</h2>
+          <div style="display: flex; justify-items: center; align-items: center; flex-direction: column; z-index: 1;">
+            <h2 style="color: red;">Game Over!</h2><br>
             <span>Score: ${score}</span><br>
             <span>${
               highestScoreItem
@@ -289,34 +313,51 @@
                 ? "New High Score: " + score
                 : ""
             }</span><br>
-            <span style="animation: blink 1.5s infinite;">Press any key or tap to continue.</span>
+              <span style="animation: blink 1.5s infinite;">Press any key or click to continue.</span>
+          </div>
           `;
 
-          document.addEventListener("keydown", restartHandler);
-          game.addEventListener("click", restartHandler);
-        }
-      }
+          document.addEventListener("keydown", (e) => {
+            if (e.code && !countdownStarted) {
+              countdownStarted = true;
+              e.preventDefault();
 
-      function restartHandler(e) {
-        if (!countdownStarted) {
-          countdownStarted = true;
-          e.preventDefault();
-          timestartText.style.visibility = "visible";
-          let countdown = 3;
-          timestartText.textContent = countdown;
+              timestartText.style.visibility = "visible";
 
-          const intervalId = setInterval(() => {
-            countdown--;
+              let countdown = 3;
+              timestartText.textContent = countdown;
+
+              const intervalId = setInterval(() => {
+                countdown--;
+                timestartText.textContent = countdown;
+
+                if (countdown <= 0) {
+                  clearInterval(intervalId);
+                  location.reload();
+                }
+              }, 1000);
+            }
+          });
+          document.addEventListener("mousedown", () => {
+            countdownStarted = true;
+
+            timestartText.style.visibility = "visible";
+
+            let countdown = 3;
             timestartText.textContent = countdown;
 
-            if (countdown <= 0) {
-              clearInterval(intervalId);
-              location.reload();
-            }
-          }, 1000);
+            const intervalId = setInterval(() => {
+              countdown--;
+              timestartText.textContent = countdown;
+
+              if (countdown <= 0) {
+                clearInterval(intervalId);
+                location.reload();
+              }
+            }, 1000);
+          });
         }
       }
-
       function startGame() {
         if (!gameStarted) {
           gameStarted = true;
@@ -326,7 +367,7 @@
           setInterval(createPipe, 2500);
           gameLoop();
         }
-        velocity = jump;
+        velocity = jump; // make bird jump when starting
       }
 
       // Controls
