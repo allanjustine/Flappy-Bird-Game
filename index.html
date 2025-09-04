@@ -277,8 +277,9 @@
           if (score > Number(highestScoreItem)) {
             localStorage.setItem("highestScoreItem", score);
           }
+
           setTimeout(() => {
-            bird.style.top = "890px";
+            bird.style.top = "calc(100vh - 100px)";
             bird.style.transform = "rotate(-90deg)";
             bird.style.transition = "all 1s ease-in-out";
           }, 100);
