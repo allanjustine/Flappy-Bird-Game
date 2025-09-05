@@ -590,6 +590,7 @@
             localStorage.setItem("highestScoreItem", score);
             highestScoreItem = score;
             isNewHigh = true;
+            await submitScore(score);
           }
 
           setTimeout(() => {
@@ -614,12 +615,6 @@
               <button type="button" style="margin-top: 20px; cursor: pointer;" onclick="handleShowScoreBoard()">Open Scoreboard</button>
           </div>
           `;
-
-          if (
-            Number(score) > Number(localStorage.getItem("highestScoreItem"))
-          ) {
-            await submitScore(score);
-          }
 
           document.addEventListener("keydown", (e) => {
             if (e.code && !countdownStarted) {
