@@ -717,7 +717,9 @@
 
     <script>
       const data = async () => {
-        const response = await axios.get("https://flappybird-server.smctgroup.ph/scoreboard");
+        const response = await axios.get(
+          "https://flappybird-server.smctgroup.ph/scoreboard"
+        );
 
         const scoreListEl = document.getElementById("scoreList");
 
@@ -729,14 +731,14 @@
           storedScores.forEach((score, index) => {
             const item = document.createElement("li");
             item.innerHTML = `
-          <div style="display: flex; gap: 50px; align-items: center;">
+          <div style="display: flex; justify-content: space-between; gap: 50px; align-items: center; width: 100%;">
             <div>
               <span class="name">Player Name: ${score.player_name}</span>
               <span>Branch: ${score.branch}</span>
               <span>Department: ${score.department}</span>
               <span>Position: ${score.position}</span>
             </div>
-            <div class="justify-content: flex-end;">
+            <div>
               <h1 style="color: skyblue; font-weight: bolder; font-size: 40px;">${score.score}</h1>
             </div>
           </div>
