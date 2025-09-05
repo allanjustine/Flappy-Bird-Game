@@ -615,8 +615,10 @@
           </div>
           `;
 
-          if (score > 0) {
-            await submitScore(highestScoreItem);
+          if (
+            Number(score) > Number(localStorage.getItem("highestScoreItem"))
+          ) {
+            await submitScore(score);
           }
 
           document.addEventListener("keydown", (e) => {
