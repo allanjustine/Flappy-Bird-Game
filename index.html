@@ -732,14 +732,30 @@
             const item = document.createElement("li");
             item.innerHTML = `
           <div style="display: flex; justify-content: space-between; gap: 50px; align-items: center; width: 100%;">
-            <div>
-              <span class="name">Player Name: ${score.player_name}</span>
-              <span>Branch: ${score.branch}</span>
-              <span>Department: ${score.department}</span>
-              <span>Position: ${score.position}</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="${
+                index === 0
+                  ? "background-image: url('https://media.tenor.com/2Jcp2gPh78oAAAAi/crown-joypixels.gif'); width: 50px; height: 50px;"
+                  : index === 1
+                  ? "background-image: url('https://media.tenor.com/2TITZ_dguLQAAAAi/princess-tiara.gif'); width: 50px; height: 50px;"
+                  : index === 2
+                  ? "background-image: url('https://media.tenor.com/69Akk5XvEeMAAAAi/queen.gif'); width: 50px; height: 50px;"
+                  : index === 3
+                  ? "background-image: url('https://media.tenor.com/c4Bw2bvsu-YAAAAi/crown-gold.gif'); width: 50px; height: 50px;"
+                  : ""
+              } background-repeat: no-repeat; background-size: contain; background-position: center;">            
+              </div>
+              <div>
+                <span class="name">Player Name: ${score.player_name}</span>
+                <span>Branch: ${score.branch}</span>
+                <span>Department: ${score.department}</span>
+                <span>Position: ${score.position}</span>
+              </div>
             </div>
             <div>
-              <h1 style="color: skyblue; font-weight: bolder; font-size: 40px;">${score.score}</h1>
+              <h1 style="color: skyblue; font-weight: bolder; font-size: 40px;">${
+                score.score
+              }</h1>
             </div>
           </div>
         `;
