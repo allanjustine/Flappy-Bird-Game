@@ -180,6 +180,81 @@
         z-index: 99999;
       }
 
+      .inputstart-form-container {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        text-shadow: 2px 2px 5px #000;
+        background-color: #0000006a;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        visibility: hidden;
+        z-index: 999999;
+      }
+
+      .inputstart-form {
+        background: #65606063;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .inputstart-form h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #c3c0c0;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #cecccc;
+      }
+
+      .form-group input {
+        width: 92%;
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+      }
+
+      .form-group input:focus {
+        border-color: #4f46e5;
+        outline: none;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        background-color: #4f46e5;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #4338ca;
+      }
+
+      .success-message {
+        margin-top: 15px;
+        color: green;
+        text-align: center;
+      }
+
       .highest-score-container {
         position: absolute;
         top: 80%;
@@ -194,6 +269,48 @@
 
       #highestScore {
         display: none;
+      }
+
+      .display-score {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #0000006a;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        z-index: 999999;
+        visibility: hidden;
+      }
+
+      .score-list {
+        width: 100%;
+        max-width: 600px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .score-list li {
+        background: #f1f5f9;
+        margin-bottom: 15px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        border-left: 5px solid #3b82f6;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      .score-list li span {
+        display: block;
+        font-size: 16px;
+        color: #444;
+      }
+
+      .score-list li .name {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 5px;
       }
 
       @keyframes blink {
@@ -220,6 +337,7 @@
         }
       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <div class="game" id="game">
@@ -233,6 +351,75 @@
       <div class="start-text" id="startText">Press Space to Start</div>
       <div class="gameover-text" id="gameoverText"></div>
       <div class="timestart-text" id="timestartText">3</div>
+      <div class="inputstart-form-container" id="inputstartFormContainer">
+        <div class="inputstart-form" id="inputstartForm">
+          <h2 style="color: green">
+            Hello! Please Enter Your Details and You can start playing
+          </h2>
+          <form id="userForm">
+            <div class="form-group">
+              <label for="player_name">Player Name:</label>
+              <input type="text" id="player-name" required />
+            </div>
+            <div class="form-group">
+              <label for="department">Department:</label>
+              <input type="text" id="department" required />
+            </div>
+            <div class="form-group">
+              <label for="branch">Branch:</label>
+              <input type="text" id="branch" required />
+            </div>
+            <div class="form-group">
+              <label for="position">Position:</label>
+              <input type="text" id="position" required />
+            </div>
+            <button type="submit">Submit</button>
+            <div
+              class="success-message"
+              id="successMessage"
+              style="display: none"
+            >
+              Data saved successfully!
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="display-score" id="displayScore">
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            margin-top: 50px;
+            background-color: rgba(49, 49, 49, 0.483);
+            height: fit-content;
+            border-radius: 10px;
+          "
+        >
+          <h1
+            style="
+              color: white;
+              font-size: 50px;
+              font-weight: bolder;
+              text-align: center;
+            "
+          >
+            Score Board
+          </h1>
+          <div
+            style="height: calc(100vh - 350px); overflow-y: auto; padding: 10px"
+          >
+            <ul class="score-list" id="scoreList"></ul>
+          </div>
+
+          <button
+            style="justify-content: flex-end; margin: 10px; width: 95%"
+            type="button"
+            onclick="closeScoreBoard()"
+          >
+            Close
+          </button>
+        </div>
+      </div>
       <div class="highest-score-container">
         <div id="highestScore"></div>
       </div>
@@ -253,6 +440,10 @@
       const gameoverText = document.getElementById("gameoverText");
       const timestartText = document.getElementById("timestartText");
       const highestScore = document.getElementById("highestScore");
+      const displayScoreBoard = document.getElementById("displayScore");
+      const inputstartFormContainer = document.getElementById(
+        "inputstartFormContainer"
+      );
 
       let birdTop = game.clientHeight / 2;
       let velocity = 0;
@@ -265,6 +456,15 @@
       let pipeGap = 250;
       let pipeSpeed = 3; // ✅ default speed
       let countdownStarted = false;
+      let playerName = localStorage.getItem("player_name") || "";
+      let department = localStorage.getItem("department") || "";
+      let branch = localStorage.getItem("branch") || "";
+      let position = localStorage.getItem("position") || "";
+      let formData = JSON.parse(localStorage.getItem("formData"));
+
+      if (!formData) {
+        inputstartFormContainer.style.visibility = "visible";
+      }
 
       if (Number(highestScoreItem) !== 0) {
         highestScore.style.display = "block";
@@ -367,14 +567,28 @@
         requestAnimationFrame(gameLoop);
       }
 
-      function endGame() {
+      async function submitScore(scoreData) {
+        try {
+          const response = await axios.post(
+            "https://flappybird-server.smctgroup.ph/submit-score",
+            {
+              ...formData,
+              score: scoreData,
+            }
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      async function endGame() {
         if (!gameOver) {
           gameOver = true;
 
           let isNewHigh = false;
           if (score > Number(highestScoreItem)) {
             localStorage.setItem("highestScoreItem", score);
-            highestScoreItem = score; // ✅ update
+            highestScoreItem = score;
             isNewHigh = true;
           }
 
@@ -394,14 +608,20 @@
                 ? "🎉 New High Score: " + score
                 : "Highest Score: " + highestScoreItem
             }</span><br>
-              <span style="animation: blink 1.5s infinite;">Press any key or click to continue.</span>
+              <span style="animation: blink 1.5s infinite;">Press any key to continue...</span>
+              <button type="button" style="margin-top: 20px; cursor: pointer;" onclick="handleShowScoreBoard()">Open Score Board</button>
           </div>
           `;
+
+          if (score > 0) {
+            await submitScore(highestScoreItem);
+          }
 
           document.addEventListener("keydown", (e) => {
             if (e.code && !countdownStarted) {
               countdownStarted = true;
               e.preventDefault();
+              displayScoreBoard.style.visibility = "hidden";
 
               timestartText.style.visibility = "visible";
 
@@ -419,28 +639,13 @@
               }, 1000);
             }
           });
-          document.addEventListener("mousedown", () => {
-            countdownStarted = true;
-
-            timestartText.style.visibility = "visible";
-
-            let countdown = 3;
-            timestartText.textContent = countdown;
-
-            const intervalId = setInterval(() => {
-              countdown--;
-              timestartText.textContent = countdown;
-
-              if (countdown <= 0) {
-                clearInterval(intervalId);
-                location.reload();
-              }
-            }, 1000);
-          });
         }
       }
 
       function startGame() {
+        if (!formData) {
+          return;
+        }
         if (!gameStarted) {
           gameStarted = true;
           startText.style.display = "none";
@@ -469,6 +674,79 @@
           velocity = jump;
         }
       });
+
+      function handleShowScoreBoard() {
+        displayScoreBoard.style.visibility = "visible";
+      }
+
+      function closeScoreBoard() {
+        displayScoreBoard.style.visibility = "hidden";
+      }
+    </script>
+
+    <script>
+      document
+        .getElementById("userForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const playerName = document.getElementById("player-name").value;
+          const department = document.getElementById("department").value;
+          const branch = document.getElementById("branch").value;
+          const position = document.getElementById("position").value;
+
+          const formData = {
+            player_name: playerName,
+            department,
+            branch,
+            position,
+          };
+
+          localStorage.setItem("formData", JSON.stringify(formData));
+
+          const successMessage = document.getElementById("successMessage");
+          successMessage.style.display = "block";
+
+          document.getElementById("userForm").reset();
+
+          setTimeout(() => {
+            location.reload();
+          }, 500);
+        });
+    </script>
+
+    <script>
+      const data = async () => {
+        const response = await axios.get("https://flappybird-server.smctgroup.ph/scoreboard");
+
+        const scoreListEl = document.getElementById("scoreList");
+
+        const storedScores = response.data.data || [];
+
+        if (storedScores.length === 0) {
+          scoreListEl.innerHTML = `<li>No scores submitted yet.</li>`;
+        } else {
+          storedScores.forEach((score, index) => {
+            const item = document.createElement("li");
+            item.innerHTML = `
+          <div style="display: flex; gap: 50px; align-items: center;">
+            <div>
+              <span class="name">Player Name: ${score.player_name}</span>
+              <span>Branch: ${score.branch}</span>
+              <span>Department: ${score.department}</span>
+              <span>Position: ${score.position}</span>
+            </div>
+            <div>
+              <h1 style="color: skyblue; font-weight: bolder; font-size: 40px;">${score.score}</h1>
+            </div>
+          </div>
+        `;
+            scoreListEl.appendChild(item);
+          });
+        }
+      };
+
+      data();
     </script>
   </body>
 </html>
