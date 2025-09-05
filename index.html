@@ -605,7 +605,9 @@
             <span>Score: ${score}</span><br>
             <span>${
               isNewHigh
-                ? "🎉 New High Score: " + score
+                ? `<img src="https://media.tenor.com/I9eJKIWR8EUAAAAi/happy-doctors-day.gif" style="width: 120px; height: 120px; margin: 0 auto;" />` +
+                  "New High Score: " +
+                  score
                 : "Highest Score: " + highestScoreItem
             }</span><br>
               <span style="animation: blink 1.5s infinite;">Press any key to continue...</span>
@@ -726,7 +728,7 @@
         const storedScores = response.data.data || [];
 
         if (storedScores.length === 0) {
-          scoreListEl.innerHTML = `<li>No scores submitted yet.</li>`;
+          scoreListEl.innerHTML = `<li>No scores yet.</li>`;
         } else {
           storedScores.forEach((score, index) => {
             const item = document.createElement("li");
