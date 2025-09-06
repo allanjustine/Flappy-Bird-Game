@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ScoreBoardController;
 use App\Http\Controllers\SnakeScoreBoardController;
 use App\Http\Controllers\SpaceScoreboardController;
+use App\Http\Controllers\TictactoeScoreboardController;
 
 Route::controller(ScoreBoardController::class)->group(function () {
     Route::get('scoreboard', 'index');
@@ -18,4 +19,9 @@ Route::controller(SnakeScoreBoardController::class)->group(function () {
 Route::controller(SpaceScoreboardController::class)->group(function () {
     Route::get('space/scoreboard', 'index');
     Route::post('space/submit-score', 'store');
+});
+
+Route::controller(TictactoeScoreboardController::class)->group(function () {
+    Route::get('tictactoe/scoreboard', 'index');
+    Route::post('tictactoe/submit-score', 'store');
 });
