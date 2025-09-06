@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChaseMeScoreboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ScoreBoardController;
 use App\Http\Controllers\SnakeScoreBoardController;
@@ -24,4 +25,9 @@ Route::controller(SpaceScoreboardController::class)->group(function () {
 Route::controller(TictactoeScoreboardController::class)->group(function () {
     Route::get('tictactoe/scoreboard', 'index');
     Route::post('tictactoe/submit-score', 'store');
+});
+
+Route::controller(ChaseMeScoreboardController::class)->group(function () {
+    Route::get('chase-me/scoreboard', 'index');
+    Route::post('chase-me/submit-score', 'store');
 });

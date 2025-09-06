@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             '/snake/submit-score',
             '/space/submit-score',
             '/tictactoe/submit-score',
+            '/chase-me/submit-score',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
