@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens([
             '/submit-score',
             '/snake/submit-score',
+            '/space/submit-score',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
